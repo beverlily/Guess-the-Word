@@ -1,0 +1,51 @@
+<!--Referenced Lab 3-->
+<!DOCTYPE HTML>
+<html lang="en">
+   <head>
+      <title>Guess the Word</title>
+      <link rel="stylesheet" type="text/css" href="css/style.css" />
+      <meta charset="utf-8" />
+   </head>
+   <body>
+      <div class="page-wrapper">
+         <!--GAME-->
+         <main class="flex-container">
+            <div id="game" class="flex-container">
+               <h1>Guess the Word</h1>
+               <div id="instructions">
+                 For this game, there needs to be a minimum of 2 players.
+                 A random user will be chosen to pick a word.
+                 Everyone else has to guess it! You all have 7 lives.
+               </div>
+               <div id="letter-container">
+                  <ul id="letters"></ul>
+               </div>
+               <div id="lives"></div>
+               <div id="guessed-word"></div>
+               <div id="result"></div>
+               <div id="button-container" class="button-container"></div>
+            </div>
+            <!--CHAT-->
+            <div id="chat-container" class="flex-container">
+               <div id="users-container" class="flex-container-column">
+                  <h2>Chat Users</h2>
+                  <div id="userCount"></div>
+                  <ul id="users"></ul>
+                  <button id="leave-chat">Leave Game</button>
+               </div>
+               <div id="message-container" class="flex-container-column">
+                  <ul id="messages" class="flex-container-column"></ul>
+                  <form id="message-box" class="flex-container">
+                     <input type="text" id="text-message" autocomplete="off" />
+                     <input type="submit" id="send-message" value="Send" />
+                  </form>
+               </div>
+            </div>
+         </main>
+      </div>
+      <!-- end of page wrapper-->
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="scripts/script.js"></script>
+   </body>
+</html>
