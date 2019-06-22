@@ -23,7 +23,7 @@ $(() => {
     });
 
     $('#leave-chat').click(() => {
-        socket.emit("end chat");
+        socket.emit("leave game");
     });
 
     $('#message-box').submit((e) => {
@@ -45,10 +45,7 @@ $(() => {
 
     $('#button-container').on("click", "#play-again", () => {
         socket.emit('play again');
-				socket.emit('get word');
     });
-
-
 
     //Socket Listeners =========================================================
 
@@ -73,14 +70,6 @@ $(() => {
                 socket.emit('add username', username);
             }
         }
-    });
-
-		socket.on('show start game button', () => {
-        $("#button-container").html("<button id='start-game' class='button'>Start Game </button>");
-    });
-
-    socket.on('full game', () => {
-        alert("Sorry this game has reached max capacity. Please try again later!");
     });
 
 		socket.on('set word', () => {
@@ -111,6 +100,7 @@ $(() => {
     socket.on('generate letter buttons', (allGuesses, gameMaster) => {
         createLetterButtons();
 
+				//only users that are not the game master can make guesses
 				if(socket.io.engine.id != gameMaster){
 					allGuesses.forEach((letter) => {
 							$(`#${letter}`).prop("disabled", true);
@@ -128,21 +118,38 @@ $(() => {
         $(`#${letter}`).addClass("guessed");
     });
 
+		socket.on('disable guessing', () => {
+				$('.letter').prop("disabled", true);
+		});
+
     socket.on('send chatroom message', (message) => {
         $('#messages').append($('<li class="message">').text(message));
     });
 
-    socket.on('end chat', (disconnectUser) => {
-        let message = (disconnectUser === username) ? "You have left the chat."
-						: `${disconnectUser} has left the chat.`;
+    socket.on('leave game', (disconnectUser) => {
+        let message = "";
+				if(disconnectUser === username){
+					message = "You have left the chat.";
+				  $(".letter").prop("disabled", true);
+				}
+				else{
+					message = `${disconnectUser} has left the chat.`;
+				}
         $('#messages').append($('<li>').text(message));
-        $('.letter').prop("disabled", true);
+    });
+
+		socket.on('full game', () => {
+        alert("Sorry this game has reached max capacity. Please try again later!");
     });
 
 		socket.on('clear', () => {
 				$('#guessed-word').html("");
 				$('#result').html("");
 		});
+
+		socket.on('show start game button', () => {
+        $("#button-container").html("<button id='start-game' class='button'>Start Game </button>");
+    });
 
 		socket.on('hide button', () => {
 				$('#button-container').html("");
