@@ -124,6 +124,8 @@ $(() => {
 
     socket.on('send chatroom message', (message) => {
         $('#messages').append($('<li class="message">').text(message));
+        const messageArea = document.getElementById("messages");
+        messageArea.scrollTop = messageArea.scrollHeight;
     });
 
     socket.on('leave game', (disconnectUser) => {
