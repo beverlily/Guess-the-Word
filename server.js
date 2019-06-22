@@ -9,7 +9,7 @@ const users = {};
 let guessedLetters;
 let allGuesses;
 let lives;
-let word;
+let word = "";
 let gameMaster = "";
 let guessedWord;
 let gameStarted = false;
@@ -37,6 +37,7 @@ const resetGame = () => {
     lives = 7;
 		result = "";
 		gameMaster = "";
+    word = "";
 };
 
 const getWord = () => {
@@ -153,6 +154,15 @@ io.on('connection', (socket) => {
 								//check if enough players to play game
 								userCount = Object.keys(users).length;
 
+                console.log(userCount);
+                console.log(gameMaster);
+                console.log()
+
+                //if game master leaves before choosing a word for the game, new game master is assigned
+                if(userCount > 1 && socket.id===gameMaster && word === ""){
+                  getWord();
+                }
+
 								//hide start game button if less than 2 players
 								if(userCount < 2) io.to('Game Room').emit('hide button');
 
@@ -161,6 +171,7 @@ io.on('connection', (socket) => {
 									gameStarted = false;
 									resetGame();
 								}
+
 						}
 				};
 
